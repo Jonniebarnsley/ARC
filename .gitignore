@@ -1,0 +1,16 @@
+.bash_profile 
+.cache
+.git
+.local
+.vim
+.conda
+.lesshst
+.parallel
+.python_history
+.viminfo
+.bash_history
+.config
+.pki
+.ssh
+.vimrc
+.bashrc
