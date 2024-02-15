@@ -142,7 +142,7 @@ for EXPT in 1; do
     MODEL=$model
     NAME=AIS-BH-GIA-exp-${EXPNUM}.${LEV}lev
     INFILE=inputs.${NAME}
-    CASEDIR=$EXPNAME/alt_${EXPNAME}_${LEV}lev_ref
+    CASEDIR=$EXPNAME/${EXPNAME}_${LEV}lev_ref
     mkdir -p $CASEDIR
     cp templates/surf_flux.py $CASEDIR/surf_flux.py
     cp templates/ismip_ramp.py $CASEDIR/ismip_ramp.py
