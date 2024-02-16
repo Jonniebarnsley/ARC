@@ -28,7 +28,7 @@ data = {}
 for var, nc in zip(vars, NCs):
     ds = xr.open_dataset(forcings / nc)
     array = np.asarray(ds[var])
-    nonan = np.nan_to_num(array, nan=0.)
+    nonan = np.nan_to_num(array)
     data[var] = nonan
 
 temp = data['T2m'] - 273.15 # Kelvin to Celsius
@@ -54,36 +54,35 @@ climate_res = climate.x[1].data - climate.x[0].data
 
 if plotfile_res != climate_res:
     dsi = int(plotfile_res / climate_res)
-    temp = block_reduce(temp, block_size=(1, dsi, dsi), func=np.mean, cval=np.max(temp))
-    precip = block_reduce(precip, block_size=(1, dsi, dsi), func=np.mean, cval=np.min(precip))
-    height = block_reduce(height, block_size=(dsi, dsi), func=np.mean, cval=np.min(height))
+    base_temp = block_reduce(temp, block_size=(1, dsi, dsi), func=np.mean, cval=np.max(temp))
+    base_precip = block_reduce(precip, block_size=(1, dsi, dsi), func=np.mean, cval=np.min(precip))
+    base_height = block_reduce(height, block_size=(dsi, dsi), func=np.mean, cval=np.min(height))
 
 # calculate corrections based on lapse rate
     
 LRT = - 0.007 # temperature lapse rate (Dolan 2018)
-temp_correction = LRT * (zsurface0 - height.data)
+temp_correction = LRT * (zsurface0 - base_height)
 
 b = len(x0)
-a = len(y0)
+a = len(y0) # weird that these have to be this way around, but it works
 temp_correction_array = np.empty((12, a, b))
 for i in range(12):
     temp_correction_array[i, :, :] = temp_correction
-temp += temp_correction_array
+temp_corrected = base_temp + temp_correction_array
 
-LRP= - @LRP # precipitation lapse rate
-precip = precip * np.exp (LRP * (zsurface0 - height))
+LRP = @LRP # precipitation lapse rate
+precip_corrected = base_precip * np.exp (-LRP * (zsurface0 - base_height))
 
 # run PDD model
 pdds = 0.004 # positive degree day factor snow
 pddi = @PDDi # positive degree day factor ice
 pdd = PDDModel(pdd_factor_snow = pdds, pdd_factor_ice = pddi)
-pdd_results = pdd(temp, precip)
+pdd_results = pdd(temp_corrected, precip_corrected)
 smb = pdd_results['smb']
 
 # save smb to netcdf
-# below are wrong way round, need to figure out at some poimt, same with a = ... and b = ...
 Y = x0
-X = y0
+X = y0 # again, weird way around but it works
 ds = xr.Dataset({'smb': (('x', 'y'), smb)},
                 coords={'x': X,
                         'y': Y})
