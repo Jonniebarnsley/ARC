@@ -2,57 +2,42 @@
 
 #$ -cwd -V
 #$ -l h_rt=02:00:00
-#$ -pe smp @NCORES
-#$ -l h_vmem=4G  #8G
-#$ -N "@NAME"
+#$ -l nodes=1
+#$ -N "@JOBID"
 #$ -m be
 #$ -M earjbar@leeds.ac.uk
-# start time:
-date
+#$ -j y
 
-# clear out modules:
+date # start time
+
+# prepare modules:
 module purge
+module load user
+module load bisicles/gia
+module load python3 netcdf hdf5
 
-module load sge
-module load intel
-module load openmpi
-module load licenses
-module load python3
-module load hdf5
-module load netcdf
-# load defaults + bisicles + python:
-module load user bisicles/gia #python/2.7.13
-# switch compilers:
-module switch intel gnu
-# switch mpi:
-module switch openmpi mvapich2
-#module load anaconda
-#source activate ismip6_ocean_forcing
+module switch intel gnu # switch compilers
+module switch openmpi mvapich2 # switch mpi
 
-# list loaded modules:
-module list 2>&1
+module list
 
+# environment variables
 BASEDIR=$SGE_O_WORKDIR
 PYDIR=$BASEDIR
 export PYTHONPATH=$PYDIR
-
 MV2_ENABLE_AFFINITY=0
 
-#make plotfile directory if it doesn't exist
-if [ ! -d "plotfiles_relax" ] ; then
-  \mkdir plotfiles_relax
-fi
+# make plotfile directory if it doesn't exist
+mkdir -p plotfiles_relax
 
 # run bisicles:
-mpirun driver2d @INFILE
+mpirun driver2d inputs_relax.@NAME
 
 # tidy up
-if [ ! -d "poutfiles_init" ] ; then
-  \mkdir poutfiles_init
-fi
-cp -r pout.* poutfiles_init/
-rm -r pout.*
+rm pout.*
+mkdir -p checkpoints
+mv chk.*.hdf5 checkpoints
 
-source @wrapper
+source wrapper.@NAME.sh
 # end time:
 date

@@ -1,0 +1,2 @@
+def flux(x,y,t,thck,topg):
+    return 268 - ((thck + topg) * 0.005)
