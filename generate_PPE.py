@@ -1,13 +1,15 @@
 import pandas as pd
 from pathlib import Path
 
+# specify ensemble name and directories as appropriate
 ensemble_name = 'ensemble'
-home = Path('ARC')
-ppe = home / 'PPE.csv'
+home = Path('ARC')                      
+ppe = home / 'PPE.csv'                  
 templates = home / 'templates'
-data = home / 'data'
-ensemble_dir = home / ensemble_name
+data = home / 'data'                    
+ensemble_dir = home / ensemble_name     
 
+# constants
 LEV = 2         # levels of refinement
 TAGCAP = LEV-1  # highest level tagged for refinement
 NCELLS = 384    # number of cells pre-refinement (16 km base resolution for 6144 km grid)
@@ -64,9 +66,11 @@ for i, row in df.iterrows():
         '@DELTAT'       :   deltaT
     }
 
+    # do substitutions and write files
     for template in templates.iterdir():
         if template.name == '.DS_Store':
             continue
+
         with open(template, 'r') as file:
             template_content = file.read()
 
