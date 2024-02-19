@@ -1,14 +1,23 @@
-import os
 import pandas as pd
 from pathlib import Path
 
-home = Path('ARC')
-ppe = home / 'PPE.csv'
+# specify ensemble name and directories as appropriate
+ensemble_name = 'ensemble'
+home = Path('ARC')                      
+ppe = home / 'PPE.csv'                  
 templates = home / 'templates'
-ensemble = home / 'Ensemble'
-ensemble.mkdir(exist_ok=True)
+data = home / 'data'                    
+ensemble_dir = home / ensemble_name     
 
-df = pd.read_csv(ppe)
+# constants
+LEV = 2         # levels of refinement
+TAGCAP = LEV-1  # highest level tagged for refinement
+NCELLS = 384    # number of cells pre-refinement (16 km base resolution for 6144 km grid)
+
+# forcings
+temp = data / 'RACMO_T2m_1979_2000_8000m_T2m_768.nc'
+precip = data / 'RACMO_precip_1979_2000_8000m_precip_768.nc'
+init_height = data / 'RACMO_T2m_precip_1979_2000_8000m_height_768.nc'
 
 # dictionary to match ISMIP gamma0 values with deltaT files
 dT_file = {
@@ -20,77 +29,56 @@ dT_file = {
     471264.2917     :   '95th_pct_PIGL_gamma_calibration'
 }
 
+df = pd.read_csv(ppe)
 for i, row in df.iterrows():
 
-    run_dir = ensemble / f'run{i+1:03}'
-    run_dir.mkdir(exist_ok=True)
+    num = f'{i+1:03}'
+    run = ensemble_dir / f'run{num}'
+    run.mkdir(parents=True)
 
-    # constants
-    lev = 2
-    TAGCAP = lev-1
-    NCELLS = 384
-    NCORES = 24
-
-    # file and directory names
-    model = row['model']
-    id = f'AIS-BH-GIA-exp{i+1:03}.{lev}lev'
-    expname = f'run{i+1:03}'
-    dirname = f'run{i+1:03}_{model}'
-    infile = f'inputs.{id}'
-    infilerelax = f'inputs.relax.{i+1:03}.${lev}lev'
-    job = f'job.{id}.sh'
-    initsmb = f'Init_SMB_{i+1:03}.py'
-    pddname = f'PDD_RatioEC_control_{i+1:03}.py'
-    wrapper = f'wrapper.{i+1:03}.sh'
-    chk = f'chk.{id}*'
+    # filenames
+    id = f'AIS-BH-GIA-{ensemble_name}-exp{num}.{LEV}lev'
+    name = f'{ensemble_name}-{num}'
+    jobid = f'run{num}'
 
     # params
-    g0 = row['gamma0']
-    deltaT = f'coeff_gamma0_DeltaT_quadratic_non_local_{dT_file[g0]}_16km_384.2d.hdf5'
+    gamma0 = row['gamma0']
     UMV = row['UMV']
     LRP = row['LRP']
     PDDi = row['PDDi']
-    C = row['WeertC']
-
-    BFC = f'bedFricCalculate_AIS-BH-GIA-exp-{i+1:03}'
+    WeertC = row['WeertC']
+    deltaT = f'coeff_gamma0_DeltaT_quadratic_non_local_{dT_file[gamma0]}_16km_384.2d.hdf5'
 
     substitutions = {
-        '@MODEL'        :   model,
-        '@EXPNAME'      :   expname,
-        '@ID'           :   id,         # change all references to @NAME to @ID
-        '@INFILE'       :   infile,
-        '@JOB'          :   job,
-        '@INITSMB'      :   initsmb,
-        '@PDDNAME'      :   pddname,
-        '@wrapper'      :   wrapper,
-        '@checkpoints'  :   chk,
-        '@gamma0'       :   g0,
-        '@DELTAT'       :   deltaT,
+        '@ID'           :   id,
+        '@JOBID'        :   jobid,    
+        '@NAME'         :   name,
+        '@NCELLS'       :   NCELLS,         
+        '@TAGCAP'       :   TAGCAP,
+        '@TEMP'         :   temp,
+        '@PRECIP'       :   precip,
+        '@HEIGHT'       :   init_height,
+        '@gamma0'       :   gamma0,
         '@UMV'          :   UMV,
         '@LRP'          :   LRP,
         '@PDDi'         :   PDDi,
-        '@WeertC'       :   C,
-        '@TAGCAP'       :   TAGCAP,
-        '@NCELLS'       :   NCELLS,
-        '@BFC'          :   BFC
+        '@WeertC'       :   WeertC,
+        '@DELTAT'       :   deltaT
     }
 
-    # replace @NAME with relax_@ID in inputs.ant_relax_template_cosmos
-    # replace @NAME with relax_@ID in job.relax_template.sh
-    # replace @NAME with @EXPNAME in templates/job.template.sh
-
+    # do substitutions and write files
     for template in templates.iterdir():
         if template.name == '.DS_Store':
             continue
+
         with open(template, 'r') as file:
             template_content = file.read()
 
+        script = template_content
         for placeholder, value in substitutions.items():
-            script = template_content.replace(placeholder, str(value))
+            script = script.replace(placeholder, str(value))
 
-        outfile_name = template.name.replace('template', f'{i+1:03}')
-        outfile = run_dir / outfile_name
-
+        outfile_name = template.name.replace('template', name)
+        outfile = run / outfile_name
         with open(outfile, 'w') as f:
             f.write(script)
-

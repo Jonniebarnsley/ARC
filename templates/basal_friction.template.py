@@ -3,8 +3,8 @@ import math
 def bedFricCalc(topg, thck, cmin, cmax, z0):
 
     zbase = topg
-    cmin=7000. # based on modern inverted
-    cmax=@WeertC # based on median of modern inverted
+    cmin = 7000. # based on modern inverted
+    cmax = @WeertC 
     z0 = -2000. # based on best performing from mini ensemble
     
     if thck == 0:

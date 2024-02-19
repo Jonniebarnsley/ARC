@@ -15,4 +15,5 @@
 .vimrc
 .bashrc
 .DS_Store
+test*
 __pycache__

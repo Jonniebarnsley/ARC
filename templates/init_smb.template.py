@@ -2,32 +2,28 @@
 
 import numpy as np
 import xarray as xr
-from pathlib import Path
 from pypdd import PDDModel
-
-cwd = Path.cwd()
-forcings = cwd.parent / 'forcing_data'
 
 # read in forcing data
 NCs = [
-    'RACMO_T2m_1979_2000_8000m_T2m_768.nc',
-    'RACMO_precip_1979_2000_8000m_precip_768.nc'
+    '@TEMP',
+    '@PRECIP'
 ]
 vars = ['T2m', 'precip']
 
 data = {}
 for var, nc in zip(vars, NCs):
-    ds = xr.open_dataset(forcings / nc)
+    ds = xr.open_dataset(nc)
     array = np.asarray(ds[var])
     nonan = np.nan_to_num(array)
     data[var] = nonan
 
-temp = data['T2m'] - 273.15 # Kelvin to Celsius
+temp = data['T2m'] - 273.15         # Kelvin to Celsius
 precip = data['precip'] / 1000 * 12 # kgm^-2yr^-1 to myr^-1
 
 # run PDD model
-pdds = 0.004 # positive degree day factor snow
-pddi = @PDDi # positive degree day factor ice
+pdds = 0.004 # pdd factor snow
+pddi = @PDDi # pdd factor ice
 pdd = PDDModel(pdd_factor_snow = pdds, pdd_factor_ice = pddi)
 pdd_results = pdd(temp, precip)
 smb = pdd_results['smb']
