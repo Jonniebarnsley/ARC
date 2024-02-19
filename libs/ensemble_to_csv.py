@@ -32,7 +32,7 @@ def txt_to_df(txt):
         fixed_time = np.concatenate([time, additional_elements])
         df['time'] = fixed_time
     
-    # trim runs that go over 9990 years because of added time coords
+    # trim runs that go over 10,000 years because of added time coords
     df = df[df['time']<10_000]
 
     return df
@@ -57,7 +57,7 @@ def main(ensemble):
         if '.gz' in run.name:
             continue
 
-        summary_file = run / f'DEPRECATED_{run.name}_2lev_ref' / 'summary_stats.txt'
+        summary_file = run / f'{run.name}_2lev_ref' / 'summary_stats.txt'
         
         try:
             with open(summary_file, 'r') as file:
@@ -67,7 +67,6 @@ def main(ensemble):
 
         df = txt_to_df(content)
         csv_path = summary_file.with_suffix('.csv')
-        #csv_path = summary_file.parent / (summary_file.name + '_DEPRECATED.csv')
         df.to_csv(csv_path)
 
 if __name__ == '__main__':

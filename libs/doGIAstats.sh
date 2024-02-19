@@ -5,9 +5,6 @@
 # inputs:
 #   <plotfiles_path>    : path to plotfiles directory
 #   <destination_path>  : path to GIAstats directory
-#
-# outputs:
-#   None
 
 source $HOME/libs/count_files.sh
 
