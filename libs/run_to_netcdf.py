@@ -47,7 +47,7 @@ def extract_field(variable, plotfile, lev=0, order=0):
     '''
 
     # read hdf5
-    amrID = amrio.load(plotfile)
+    amrID = amrio.load(str(plotfile))
     time = amrio.queryTime(amrID)
     lo, hi = amrio.queryDomainCorners(amrID, lev)
     x0, y0, field = amrio.readBox2D(amrID, lev, lo, hi, variable, order)
