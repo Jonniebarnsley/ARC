@@ -82,7 +82,7 @@ def generate_netcdf(variable, run, lev=0):
     run_directory = Path(run)
     ensemble = run_directory.parent
     savedir = ensemble / 'netcdfs' / variable
-    savedir.mkdir(parents=True, exists_ok=True)
+    savedir.mkdir(parents=True, exist_ok=True)
 
     # skip if file already exists
     filepath = savedir / f'{ensemble.name}_{run_directory.name}_{variable}_{lev}lev.nc'
