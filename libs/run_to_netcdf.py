@@ -75,7 +75,7 @@ def generate_netcdf(variable, run, lev=0):
 
     :param variable:    variable name (str)
     :param run:         run directory name (str)
-    :param savedir:     directory in which to save netcdfs (str)
+    :param lev:         level (int)
     '''
 
     # prepare directory
@@ -110,13 +110,13 @@ def generate_netcdf(variable, run, lev=0):
     # concatenate along the time axis
     concatenated = xr.concat(timeslices, dim='time')
     ds = concatenated.assign_coords(time=times)
-
-    precision = specs[variable]['prec']
-    dtype = specs[variable]['dtype']
-
-    ds[variable].encoding.update({'zlib': True})
     ds = ds.sel(time=slice(0, MAX_TIME)) # trim off any leftover after time adjustments
 
+    # get enconding info
+    precision = specs[variable]['prec']
+    dtype = specs[variable]['dtype']
+    ds[variable].encoding.update({'zlib': True})
+    
     # save netcdf
     ds.to_netcdf(filepath, encoding={variable: {
         'zlib'          : True, 
