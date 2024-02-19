@@ -7,17 +7,20 @@
 #$ -N "process_thickness"
 #$ -m be
 #$ -M earjbar@leeds.ac.uk
-# start time:
-date
-# clear out modules:
+#$ -j y
+
+date # start time
+
 module purge
+module load parallel
 
 module load anaconda
 module unload python-libs
 source activate postprocessing
-module load parallel
+
 NCORES=10
 ENSEMBLE="/nobackup/earjo/AIS_PPE_control_ensemble"
+
 export PYTHONPATH="${PYTHONPATH}:/home/home01/earjbar/.conda/envs/postprocessing/"
 
 parallel -j $NCORES 'python run_to_netcdf.py {} thickness' ::: $ENSEMBLE/run*control
