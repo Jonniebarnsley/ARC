@@ -11,6 +11,9 @@ genpath='/nobackup/earjo/python_modules'
 sys.path.append(genpath)
 from amrfile import io as amrio
 
+MAX_TIME = 10_000   # trim time axis at this value
+FILL_VALUE = 0      # fill NaNs with this value
+
 # specs for encoding
 specs={
     'thickness'                     :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m'},
@@ -36,21 +39,24 @@ def extract_field(variable, plotfile, lev=0, order=0):
     '''
     Extracts time and variable data from a .hdf5 plotfile and returns an xarray dataset
 
-    :param variablename: (str)
+    :param variable: (str)
     :param plotfile: name of plotfile (str)
 
     :return time: time of plotfile (int)
     :return ds: dataset of variable (xr.DataSet)
     '''
 
+    # read hdf5
     amrID = amrio.load(plotfile)
     time = amrio.queryTime(amrID)
     lo, hi = amrio.queryDomainCorners(amrID, lev)
     x0, y0, field = amrio.readBox2D(amrID, lev, lo, hi, variable, order)
 
+    # convert into correct units
     conversion_factor = specs[variable]['conversion']
     field_in_units = np.asarray(field) * conversion_factor
 
+    # make DataSet
     ds = xr.Dataset({
         variable: xr.DataArray(
             data = field_in_units,
@@ -72,22 +78,24 @@ def generate_netcdf(variable, run, lev=0):
     :param savedir:     directory in which to save netcdfs (str)
     '''
 
+    # prepare directory
     run_directory = Path(run)
     ensemble = run_directory.parent
     savedir = ensemble / 'netcdfs' / variable
     savedir.mkdir(parents=True, exists_ok=True)
 
+    # skip if file already exists
     filepath = savedir / f'{ensemble.name}_{run_directory.name}_{variable}_{lev}lev.nc'
     if filepath.is_file():
         return
 
-    plotfiles = run_directory / f'{run_directory.name}_2lev_ref' / 'plotfiles'
-
     times = []
     timeslices = []
+    plotfiles = run_directory / f'{run_directory.name}_2lev_ref' / 'plotfiles'
     for plotfile in sorted(plotfiles.iterdir()):
 
-        time, timeslice = extract_field(variable, plotfile)
+        # get datasets from plotfiles and associated time coordinates
+        time, timeslice = extract_field(variable, plotfile, lev=lev)
         times.append(time)
         timeslices.append(timeslice)
 
@@ -99,26 +107,28 @@ def generate_netcdf(variable, run, lev=0):
     if times[273] == times[274] == 8190:
         times = times[:274]+[t+30 for t in times[274:]]
 
+    # concatenate along the time axis
     concatenated = xr.concat(timeslices, dim='time')
     ds = concatenated.assign_coords(time=times)
 
     precision = specs[variable]['prec']
     dtype = specs[variable]['dtype']
-   
-    ds[variable].encoding.update({'zlib': True})
-    ds = ds.sel(t=slice(None, 9990))
 
+    ds[variable].encoding.update({'zlib': True})
+    ds = ds.sel(time=slice(0, MAX_TIME)) # trim off any leftover after time adjustments
+
+    # save netcdf
     ds.to_netcdf(filepath, encoding={variable: {
         'zlib'          : True, 
         'complevel'     : 6, 
         'dtype'         : dtype,
         'scale_factor'  : precision, 
-        '_FillValue'    : 0
+        '_FillValue'    : FILL_VALUE
         }})
 
 if __name__== '__main__':
-    if len(sys.args) != 3:
-        print('Usage: python generate_run_NCs.py <run_directory> <variable> <save_directory>')
+    if len(sys.argv) != 3:
+        print('Usage: python generate_run_NCs.py <run_directory> <variable>')
     else:
         run = sys.argv[1]
         variable = sys.argv[2]
