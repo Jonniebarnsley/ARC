@@ -17,7 +17,18 @@ NCELLS = 384    # number of cells pre-refinement (16 km base resolution for 6144
 # forcings
 temp = data / 'RACMO_T2m_1979_2000_8000m_T2m_768.nc'
 precip = data / 'RACMO_precip_1979_2000_8000m_precip_768.nc'
+ISMIP_ocean_forcing = data / 'obs_thermal_forcing_1995-2017_16km_bisicles_compatible.hdf5'
 init_height = data / 'RACMO_T2m_precip_1979_2000_8000m_height_768.nc'
+
+# boundary conditions
+#geometry        = data / 'ant-minbed64-s-geometry-1km.2d.hdf5'
+#init_geometry   = data / 'bedmachine_modified_bedrock_geometry_1km_6144.hdf5'
+#basin_mask      = data / 'imbie2_basin_mask_8km.2d.hdf5'
+#geothermal_heat = data / 'Heatflux_ShapiroRitzwoller2004_antarctica_plismip_8kmx8km_768.2d.hdf5'
+#init_friction   = data / 'ant-mb64-cthird-1km.2d.hdf5'
+#init_stifness   = data / 'ant-mb64-mucoefLT1-1km.2d.hdf5'
+#init_temp       = data / 'antarctica-temperature-4km.2d.hdf5'
+#init_surf_flux  = data / 'antarctica-acca-4km.2d.hdf5'
 
 # dictionary to match ISMIP gamma0 values with deltaT files
 dT_file = {
@@ -37,7 +48,7 @@ for i, row in df.iterrows():
     run.mkdir(parents=True)
 
     # filenames
-    id = f'AIS-BH-GIA-{ensemble_name}-exp{num}.{LEV}lev'
+    id = f'AIS-BH-GIA-{ensemble_name}-exp{num}.{LEV}lev' # fancy id for plot/checkpoint files
     name = f'{ensemble_name}-{num}'
     jobid = f'run{num}'
 
@@ -47,7 +58,9 @@ for i, row in df.iterrows():
     LRP = row['LRP']
     PDDi = row['PDDi']
     WeertC = row['WeertC']
-    deltaT = f'coeff_gamma0_DeltaT_quadratic_non_local_{dT_file[gamma0]}_16km_384.2d.hdf5'
+
+    # ISMIP ocean forcing correction
+    deltaT = data / f'coeff_gamma0_DeltaT_quadratic_non_local_{dT_file[gamma0]}_16km_384.2d.hdf5'
 
     substitutions = {
         '@ID'           :   id,
@@ -57,6 +70,7 @@ for i, row in df.iterrows():
         '@TAGCAP'       :   TAGCAP,
         '@TEMP'         :   temp,
         '@PRECIP'       :   precip,
+        '@ISMIP_OCEAN'  :   ISMIP_ocean_forcing,
         '@HEIGHT'       :   init_height,
         '@gamma0'       :   gamma0,
         '@UMV'          :   UMV,
@@ -64,6 +78,14 @@ for i, row in df.iterrows():
         '@PDDi'         :   PDDi,
         '@WeertC'       :   WeertC,
         '@DELTAT'       :   deltaT
+        #'@GEOMETRY'     :   geometry,
+        #'@INIT_GEOM'    :   init_geometry,
+        #'@BASINS'       :   basin_mask,
+        #'@GEO_HEAT'     :   geothermal_heat,
+        #'@INVERSE'      :   init_friction,
+        #'@STIFNESS'     :   init_stifness,
+        #'@INIT_TEMP'    :   init_temp,
+        #'@INIT_FLUX'    :   init_surf_flux,
     }
 
     # do substitutions and write files
