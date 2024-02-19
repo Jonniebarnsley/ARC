@@ -17,9 +17,8 @@ module unload python-libs
 source activate postprocessing
 module load parallel
 NCORES=10
+ENSEMBLE="/nobackup/earjo/AIS_PPE_control_ensemble"
 export PYTHONPATH="${PYTHONPATH}:/home/home01/earjbar/.conda/envs/postprocessing/"
-echo $PYTHONPATH
 
-#parallel -j $NCORES --dry-run echo {} ';' 'python generate_compressed_output_v1.py {} >> ProcLogs/{}_outputs.txt' ::: run*cosmos run*cesm
-parallel -j $NCORES 'python generate_compressed_output_plotsAllSameDir_specVar.py {} thickness >> ProcLogs/{}_outputs.txt' ::: run*control
+parallel -j $NCORES 'python run_to_netcdf.py {} thickness' ::: $ENSEMBLE/run*control
 
