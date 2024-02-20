@@ -1,6 +1,6 @@
 #!/bin/env python
-# script to extract data from hdf5 plotfiles
-# Usage: "python run_to_netcdf.py <run_directory> <variable>"
+# script to extract data from hdf5 plotfiles using mpi4py for parallel processing on ARCHER2
+# Usage: "srun python run_to_netcdf.py <variable>"
 
 import sys
 import numpy as np
@@ -15,7 +15,7 @@ from amrfile import io as amrio
 
 MAX_TIME = 10_000   # trim time axis at this value
 FILL_VALUE = 0      # fill NaNs with this value
-directories = ['/path/to/dir1', 'path/to/dir2', 'path/to/dir3']
+DIRS = ['/path/to/dir1', 'path/to/dir2', 'path/to/dir3']
 
 # specs for encoding
 specs={
@@ -135,7 +135,7 @@ if __name__== '__main__':
     if len(sys.argv) != 2 and rank == 0:
         print('Usage: python generate_run_NCs.py <variable>')
     else:
-        run = directories[rank]
+        run = DIRS[rank]
         variable = sys.argv[1]
         generate_netcdf(variable, run)
 
