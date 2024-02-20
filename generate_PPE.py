@@ -20,16 +20,6 @@ precip = data / 'RACMO_precip_1979_2000_8000m_precip_768.nc'
 ISMIP_ocean_forcing = data / 'obs_thermal_forcing_1995-2017_16km_bisicles_compatible.hdf5'
 init_height = data / 'RACMO_T2m_precip_1979_2000_8000m_height_768.nc'
 
-# boundary conditions
-#geometry        = data / 'ant-minbed64-s-geometry-1km.2d.hdf5'
-#init_geometry   = data / 'bedmachine_modified_bedrock_geometry_1km_6144.hdf5'
-#basin_mask      = data / 'imbie2_basin_mask_8km.2d.hdf5'
-#geothermal_heat = data / 'Heatflux_ShapiroRitzwoller2004_antarctica_plismip_8kmx8km_768.2d.hdf5'
-#init_friction   = data / 'ant-mb64-cthird-1km.2d.hdf5'
-#init_stifness   = data / 'ant-mb64-mucoefLT1-1km.2d.hdf5'
-#init_temp       = data / 'antarctica-temperature-4km.2d.hdf5'
-#init_surf_flux  = data / 'antarctica-acca-4km.2d.hdf5'
-
 # dictionary to match ISMIP gamma0 values with deltaT files
 dT_file = {
     9618.882299     :   '5th_percentile',
@@ -78,14 +68,6 @@ for i, row in df.iterrows():
         '@PDDi'         :   PDDi,
         '@WeertC'       :   WeertC,
         '@DELTAT'       :   deltaT
-        #'@GEOMETRY'     :   geometry,
-        #'@INIT_GEOM'    :   init_geometry,
-        #'@BASINS'       :   basin_mask,
-        #'@GEO_HEAT'     :   geothermal_heat,
-        #'@INVERSE'      :   init_friction,
-        #'@STIFNESS'     :   init_stifness,
-        #'@INIT_TEMP'    :   init_temp,
-        #'@INIT_FLUX'    :   init_surf_flux,
     }
 
     # do substitutions and write files
@@ -93,8 +75,7 @@ for i, row in df.iterrows():
         if template.name == '.DS_Store':
             continue
 
-        with open(template, 'r') as file:
-            template_content = file.read()
+        template_content = template.read_text()
 
         script = template_content
         for placeholder, value in substitutions.items():
@@ -102,5 +83,4 @@ for i, row in df.iterrows():
 
         outfile_name = template.name.replace('template', name)
         outfile = run / outfile_name
-        with open(outfile, 'w') as f:
-            f.write(script)
+        outfile.write_text(script)

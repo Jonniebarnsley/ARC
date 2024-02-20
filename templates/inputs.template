@@ -162,10 +162,10 @@ basalFlux.floating.flux1.function = ramp
 #ISMIP parameterization
 basalFlux.floating.flux2.type = IMSIP6OceanForcing
 basalFlux.floating.flux2.start_time = 0
-basalFlux.floating.flux2.file_format = ../../run_data/obs_thermal_forcing_1995-2017_16km_bisicles_compatible.hdf5
+basalFlux.floating.flux2.file_format = @ISMIP_OCEAN
 basalFlux.floating.flux2.name = thermal_forcing_0000
 basalFlux.floating.flux2.anomaly = false
-basalFlux.floating.flux2.deltaT_file = ../../run_data/@DELTAT
+basalFlux.floating.flux2.deltaT_file = @DELTAT
 #non-local (standard) melt rate
 basalFlux.floating.flux2.local = false #true
 basalFlux.floating.flux2.gamma0 = @gamma0

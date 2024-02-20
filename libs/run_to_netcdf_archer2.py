@@ -5,6 +5,7 @@
 import sys
 import numpy as np
 import xarray as xr
+from mpi4py import MPI
 from pathlib import Path
 
 # import amrio from bisicles
@@ -14,6 +15,7 @@ from amrfile import io as amrio
 
 MAX_TIME = 10_000   # trim time axis at this value
 FILL_VALUE = 0      # fill NaNs with this value
+directories = ['/path/to/dir1', 'path/to/dir2', 'path/to/dir3']
 
 # specs for encoding
 specs={
@@ -128,11 +130,13 @@ def generate_netcdf(variable: str, run: str, lev: int=0):
         }})
 
 if __name__== '__main__':
-    if len(sys.argv) != 3:
-        print('Usage: python generate_run_NCs.py <run_directory> <variable>')
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    if len(sys.argv) != 2 and rank == 0:
+        print('Usage: python generate_run_NCs.py <variable>')
     else:
-        run = sys.argv[1]
-        variable = sys.argv[2]
+        run = directories[rank]
+        variable = sys.argv[1]
         generate_netcdf(variable, run)
 
                            
