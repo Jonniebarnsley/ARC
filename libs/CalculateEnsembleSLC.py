@@ -1,14 +1,13 @@
 # python script to generate a csv with timeseries of sea level contribution for each run
 
-import os
 import re
 import sys
 import pandas as pd
-import numpy as np
+from numpy import array
 from pathlib import Path
 from summary_to_csv import txt_to_df
 
-def Calculate_SLC(VAF, bBSL, TIV):
+def Calculate_SLC(VAF: array, bBSL: array, TIV: array) -> array:
 
     '''
     Calculates sea level contribution from variables provided by GIAstats.
@@ -26,18 +25,23 @@ def Calculate_SLC(VAF, bBSL, TIV):
     rho_ocean = 1028    # density of seawater (kg m^-3)
     rho_ice = 918       # density of ice (kg m^-3)
 
-    SLC_af = -(VAF - VAF[0]) * rho_ice / (rho_ocean * A_ocean)
-    SLC_pov = -(bBSL - bBSL[0]) / A_ocean
-    SLC_den = -(TIV - TIV[0]) * (rho_ice/1000 - rho_ice/rho_ocean) / A_ocean
+    VAF_init = VAF[0]
+    bBSL_init = bBSL[0]
+    TIV_init = TIV[0]
+
+    SLC_af = -(VAF - VAF_init) * rho_ice / (rho_ocean * A_ocean)
+    SLC_pov = -(bBSL - bBSL_init) / A_ocean
+    SLC_den = -(TIV - TIV_init) * (rho_ice/1000 - rho_ice/rho_ocean) / A_ocean
     
     SLC = SLC_af + SLC_pov + SLC_den
     
     return SLC
 
-def get_init_state(ensemble):
+def get_init_state(ensemble: Path) -> pd.DataFrame:
 
     '''
     Finds initial values of all GIAstats variables for an ensemble.
+
     input: 
         - ensemble: pathlib Path object to the ensemble directory
     output: 
@@ -116,7 +120,7 @@ def main(ensemble):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print('Usage: CalculateEnsembleSLC.py <ensemble_path>')
+        raise SystemExit('Usage: CalculateEnsembleSLC.py <ensemble_path>')
     else:
         ensemble = sys.argv[1]
         main(ensemble)
