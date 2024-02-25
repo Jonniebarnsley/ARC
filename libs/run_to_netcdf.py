@@ -1,6 +1,11 @@
 #!/bin/env python
-# script to extract data from hdf5 plotfiles
-# Usage: "python run_to_netcdf.py <run_directory> <variable>"
+
+'''
+Script to extract data from hdf5 plotfiles and save it as a netcdf.
+
+Usage: "python run_to_netcdf.py <run_directory> <variable>"
+'''
+
 
 import sys
 import numpy as np
