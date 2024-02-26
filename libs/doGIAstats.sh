@@ -32,6 +32,7 @@ statstool() {
         "$EXEC" "$plotfile" 918.0 1028.0 9.81 0.0 "$MASK"
     else
         "$EXEC" "$plotfile" 918.0 1028.0 9.81 0.0 # <rho_ice> <rho_seawater> <gravity> <sea_level>
+    fi
 }
 
 doGIAstats() {
