@@ -13,14 +13,12 @@ statstool() {
     local EXEC="/nobackup/earjo/gia_stats_exec/gia-stats2d"
 
     # handle option to include mask with -m
-    local is_mask=false
+    is_mask=false
     while getopts ":m:" opt; do
-        case $opt in
-            m)  
-                local is_mask=true
-                local MASK="$OPTARG" ;;
-            \?) 
-                echo "Invalid option: -$OPTARG" >&2
+        case "${opt}" in
+            m)  is_mask=true
+                MASK="${OPTARG}" ;;
+            \?) echo "Invalid option: -${OPTARG}" >&2
                 return 1 ;;
         esac
     done
@@ -28,10 +26,12 @@ statstool() {
 
     local plotfile=$1
 
-    if $is_mask; then
-        "$EXEC" "$plotfile" 918.0 1028.0 9.81 0.0 "$MASK"
+    if [[ $is_mask == true ]]; then
+        echo "loading mask..."
+        #"$EXEC" "$plotfile" 918.0 1028.0 9.81 0.0 "$MASK"
     else
-        "$EXEC" "$plotfile" 918.0 1028.0 9.81 0.0 # <rho_ice> <rho_seawater> <gravity> <sea_level>
+        echo "doing stats for whole continent..."
+        #"$EXEC" "$plotfile" 918.0 1028.0 9.81 0.0 # <rho_ice> <rho_seawater> <gravity> <sea_level>
     fi
 }
 
