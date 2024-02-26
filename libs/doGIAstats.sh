@@ -8,7 +8,31 @@
 
 source $HOME/libs/count_files.sh
 
-EXEC="/nobackup/earjo/gia_stats_exec/gia-stats2d"
+statstool() {
+
+    local EXEC="/nobackup/earjo/gia_stats_exec/gia-stats2d"
+
+    # handle option to include mask with -m
+    local is_mask=false
+    while getopts ":m:" opt; do
+        case $opt in
+            m)  
+                local is_mask=true
+                local MASK="$OPTARG" ;;
+            \?) 
+                echo "Invalid option: -$OPTARG" >&2
+                return 1 ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    local plotfile=$1
+
+    if is_mask; then
+        "$EXEC" "$plotfile" 918.0 1028.0 9.81 0.0 "$MASK"
+    else
+        "$EXEC" "$plotfile" 918.0 1028.0 9.81 0.0 # <rho_ice> <rho_seawater> <gravity> <sea_level>
+}
 
 doGIAstats() {
     
@@ -37,11 +61,10 @@ doGIAstats() {
     
     # make GIAstats dir if it doesn't already exist
     mkdir -p $GIAstats
-    
+
+    # if plotfiles and GIAstats are the same size, stop
     local totalPlot=$(count_files "$plotfiles" 'plot.*.2d.hdf5')
     local totalGIA=$(count_files "$GIAstats" 'plot.*.GIAstats')
-    
-    # if plotfiles and GIAstats are the same size, stop
     if [ "$totalPlot" -eq "$totalGIA" ]; then
         return
     fi
@@ -61,7 +84,7 @@ doGIAstats() {
             if $is_mask; then
                 "$EXEC" "$file" 918.0 1028.0 9.81 0.0 "$MASK"
             else
-                "$EXEC" "$file" 918.0 1028.0 9.81 0.0 # <p_ice> <p_seawater> <gravity> <sea_level>
+                "$EXEC" "$file" 918.0 1028.0 9.81 0.0 # <rho_ice> <rho_seawater> <gravity> <sea_level>
             fi
             cat pout.0 >> "$GIAstats/$statsfile" # save output to statsfile
         fi
