@@ -58,6 +58,7 @@ fi
 
 # otherwise, iterate over plotfiles
 current=0
+echo $BASIN
 for file in "$plotfiles"/plot.*.2d.hdf5; do
     
     ((current += 1)) # increment counter
@@ -68,20 +69,16 @@ for file in "$plotfiles"/plot.*.2d.hdf5; do
 
     # if corresponding statsfile doesn't exist, make one
     if [ ! -e "${statsfile}" ]; then
+        echo "${count} ${filename} ..."
 
         # check for mask
         if [ -z "${MASK}" ]; then
-            echo "${count} ${filename} ..."
-            bash statstool.sh $file
-            #"$EXEC" "$file" 918.0 1028.0 9.81 0.0
-            
+            bash $HOME/libs/statstool.sh $file           
         else
-            echo "${BASIN} ${count} ${filename} ..."
-            bash statstool.sh -m $MASK -b $BASIN_ID $file
-            #"$EXEC" "$file" 918.0 1028.0 9.81 0.0 "$MASK" "$BASIN_ID"
+            bash $HOME/libs/statstool.sh -m $MASK -b $BASIN_ID $file
         fi
-        
-        cat pout.0 >> "$GIAstats/$statsfile" # save output to statsfile
+
+        cat pout.0 >> "$statsfile" # save output to statsfile
     fi
 done
 

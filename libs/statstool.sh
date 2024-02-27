@@ -27,23 +27,9 @@ fi
 
 FILE="$1"
 
-case $BASIN in
-    0)  
-        basin_name="WAIS" 
-        ;;
-    1)  
-        basin_name="EAIS" 
-        ;;
-    2)  
-        basin_name="APIS" 
-        ;;
-esac
-
 # apply stats tool
 if [ -z "${MASK}" ]; then
-    echo "continent wide"
-    #$STATS $FILE 918.0 1028.0 9.81 0.0 # <rho_ice> <rho_seawater> <gravity> <sea_level>
+    $STATS $FILE 918.0 1028.0 9.81 0.0 # <rho_ice> <rho_seawater> <gravity> <sea_level>
 else
-    echo "mask activated, basin $basin_name"
-    #$STATS $FILE 918.0 1028.0 9.81 0.0 $MASK $BASIN
+    $STATS $FILE 918.0 1028.0 9.81 0.0 $MASK $BASIN
 fi
