@@ -86,7 +86,7 @@ def main(filepath: str) -> None:
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print('Usage: python summary_to_csv.py <path/to/summary.txt>')
+        raise SystemExit('Usage: python summary_to_csv.py <path/to/summary.txt>')
     else:
         filepath = sys.argv[1]
         main(filepath)

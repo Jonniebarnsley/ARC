@@ -134,7 +134,7 @@ def generate_netcdf(variable: str, run: str, lev: int=0):
 
 if __name__== '__main__':
     if len(sys.argv) != 3:
-        print('Usage: python generate_run_NCs.py <run_directory> <variable>')
+        raise SystemExit('Usage: python generate_run_NCs.py <run_directory> <variable>')
     else:
         run = sys.argv[1]
         variable = sys.argv[2]

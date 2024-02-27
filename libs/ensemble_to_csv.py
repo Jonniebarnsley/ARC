@@ -71,7 +71,7 @@ def main(ensemble):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print('Usage: python summary_to_csv.py <ensemble_path>')
+        raise SystemExit('Usage: python summary_to_csv.py <ensemble_path>')
     else:
         ensemble = sys.argv[1]
         main(ensemble)

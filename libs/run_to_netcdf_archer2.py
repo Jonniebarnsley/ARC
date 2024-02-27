@@ -133,7 +133,7 @@ if __name__== '__main__':
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     if len(sys.argv) != 2 and rank == 0:
-        print('Usage: python generate_run_NCs.py <variable>')
+        raise SystemExit('Usage: python generate_run_NCs.py <variable>')
     else:
         run = DIRS[rank]
         variable = sys.argv[1]
