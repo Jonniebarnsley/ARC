@@ -10,7 +10,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 run="$1"
-name=$(basename $run_directory)
+name=$(basename $run)
 dir=$run/${name}_2lev_ref
 plotfiles=$dir/plotfiles
 
