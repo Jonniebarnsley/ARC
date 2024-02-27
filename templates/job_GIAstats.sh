@@ -4,7 +4,7 @@
 #$ -l h_rt=12:00:00
 #$ -pe smp 1
 #$ -l h_vmem=4G
-#$ -N "GIAstats"
+#$ -N "@JOBIDstats"
 #$ -m be
 #$ -j y
 #$ -M earjbar@leeds.ac.uk
