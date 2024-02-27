@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #$ -cwd -V
-#$ -l h_rt=12:00:00
+#$ -l h_rt=3:00:00
 #$ -pe smp 1
 #$ -l h_vmem=4G
 #$ -N "@JOBIDstats"
