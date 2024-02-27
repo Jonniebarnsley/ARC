@@ -15,13 +15,13 @@ getIMBIEbasin() {
     local ID="$1"
     case $ID in
     0)
-        return "WAIS"
+        echo "WAIS"
         ;;
     1)
-        return "EAIS"
+        echo "EAIS"
         ;;
     2)
-        return "APIS"
+        echo "APIS"
         ;;
 esac
 }
