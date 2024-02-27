@@ -26,17 +26,7 @@ while getopts ":m:b:" option; do
 done
 shift $((OPTIND - 1))
 
-case $BASIN_ID in
-    0)  
-        BASIN="WAIS" 
-        ;;
-    1)  
-        BASIN="EAIS" 
-        ;;
-    2)  
-        BASIN="APIS" 
-        ;;
-esac
+BASIN=$(getIMBIEbasin "$BASIN_ID")
 
 # check args    
 if [ "$#" -ne 2 ]; then
@@ -58,14 +48,13 @@ fi
 
 # otherwise, iterate over plotfiles
 current=0
-echo $BASIN
 for file in "$plotfiles"/plot.*.2d.hdf5; do
     
     ((current += 1)) # increment counter
     count="(${current}/${totalPlot})"
 
     filename=$(basename "$file")
-    statsfile="${GIAstats}/${filename%.2d.hdf5}.GIAstats"
+    statsfile="${GIAstats}/${filename%.2d.hdf5}.${BASIN}.GIAstats"
 
     # if corresponding statsfile doesn't exist, make one
     if [ ! -e "${statsfile}" ]; then
