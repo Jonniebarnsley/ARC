@@ -22,8 +22,7 @@ MASK=$HOME/basin_mask.hdf5
 
 for BASIN_ID in 0 1 2; do
     BASIN=$(getIMBIEbasin $BASIN_ID)
+    basin_stats="GIAstats/${BASIN}"
+
+    bash $HOME/libs/GIAstats.sh -m $MASK -b $BASIN plotfiles $basin_stats
 done
-
-basin_stats="GIAstats/${BASIN}"
-
-bash $HOME/libs/GIAstats.sh -m $MASK -b $BASIN plotfiles $basin_stats
