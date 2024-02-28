@@ -1,6 +1,7 @@
 .bash_profile 
 .cache
 .git
+.gitconfig
 .local
 .vim
 .conda
