@@ -14,7 +14,7 @@ outfile="$2"
 
 # if the summary already contains data up to 9990 years, stop
 if [ -f $outfile ] && tail $outfile | grep -q 'time = 9.990'; then
-    return
+    exit 1
 fi
 
 # otherwise, wipe the summary file and copy all statsfiles into summary
