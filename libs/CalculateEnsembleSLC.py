@@ -116,7 +116,7 @@ def main(ensemble, basin):
     #SLC_df_with_time = SLC_df.set_index(time)
     
     # save to csv
-    csv_path = path / f'{path.name}.csv'
+    csv_path = path / f'{path.name}_{basin}.csv'
     SLC_df.to_csv(csv_path)
     
 
@@ -125,6 +125,6 @@ if __name__ == '__main__':
         raise SystemExit('Usage: CalculateEnsembleSLC.py <ensemble_path>')
     else:
         ensemble = sys.argv[1]
-        for basin in ['WAIS', 'EAIS', 'APIS']:
+        for basin in ['AIS', 'WAIS', 'EAIS', 'APIS']:
             main(ensemble, basin)
 
