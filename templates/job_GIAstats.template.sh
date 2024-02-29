@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #$ -cwd -V
-#$ -l h_rt=3:00:00
+#$ -l h_rt=6:00:00
 #$ -pe smp 1
-#$ -l h_vmem=4G
+#$ -l h_vmem=2G
 #$ -N "@JOBID_stats"
 #$ -m be
 #$ -j y
@@ -18,7 +18,7 @@ module switch intel gnu
 
 source $HOME/libs/utils.sh
 
-MASK=$HOME/basin_mask.hdf5
+MASK=$HOME/data/ISMIP_basin_mask_16km.hdf5
 
 for BASIN_ID in 0 1 2; do
     BASIN=$(getIMBIEbasin $BASIN_ID)

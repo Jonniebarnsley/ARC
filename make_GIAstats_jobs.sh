@@ -10,6 +10,6 @@ for run in $CONTROL/run*control; do
 
     job="$dir/job_GIAstats.${name}.sh"
 
+    #sed -e s/@JOBID/$name/ $HOME/templates/job_GIAstats.template.sh > $job
     qsub $job
-
 done
