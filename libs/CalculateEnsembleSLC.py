@@ -37,19 +37,20 @@ def Calculate_SLC(VAF: array, bBSL: array, TIV: array) -> array:
     
     return SLC
 
-def get_init_state(ensemble: Path) -> pd.DataFrame:
+def get_init_state(ensemble: Path, basin: str='AIS') -> pd.DataFrame:
 
     '''
     Finds initial values of all GIAstats variables for an ensemble.
 
-    input: 
+    input:
         - ensemble: pathlib Path object to the ensemble directory
-    output: 
+    output:
         - Pandas dataframe with one row and columns for each GIAstats output var
     '''
     
-    relax_stats = sorted(ensemble.glob('run*/run*_2lev_ref/GIAstats_relax'))[0]
-    init_stats = sorted(relax_stats.iterdir())[0]
+    relax_stats = sorted(ensemble.glob('run*/run*_2lev_ref/GIAstats_relax/'))[0]
+    basin_stats = relax_stats / basin
+    init_stats = sorted(basin_stats.iterdir())[0]
 
     with open(init_stats, 'r') as file:
         content = file.read()
@@ -57,7 +58,7 @@ def get_init_state(ensemble: Path) -> pd.DataFrame:
     df = txt_to_df(content)
     return df
 
-def main(ensemble):
+def main(ensemble, basin):
 
     '''
     Iterates over an ensemble, calculating a time series for sea level contribution 
@@ -88,10 +89,11 @@ def main(ensemble):
         
         # open summary_stats.csv if it exists
         run_num = match.group(1)
-        csv = dir / f'{dir.name}_2lev_ref' / 'summary_stats.csv'
+        csv = dir / f'{dir.name}_2lev_ref' / f'{basin}_{run_num}_control_summary_stats.csv'
         try:
             run_df = pd.read_csv(csv)
         except FileNotFoundError:
+            print(f'File not found: {run_df}')
             continue
         
         # add inital state in at time=0 and extract arrays for Volume Above Floatation,
@@ -123,5 +125,6 @@ if __name__ == '__main__':
         raise SystemExit('Usage: CalculateEnsembleSLC.py <ensemble_path>')
     else:
         ensemble = sys.argv[1]
-        main(ensemble)
+        for basin in ['WAIS', 'EAIS', 'APIS']:
+            main(ensemble, basin)
 
