@@ -71,7 +71,7 @@ def main(ensemble, basin):
     '''
     
     path = Path(ensemble)
-    init_df = get_init_state(path)
+    init_df = get_init_state(path, basin)
     
     data = {}
     for dir in path.iterdir():
