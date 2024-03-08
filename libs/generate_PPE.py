@@ -3,10 +3,11 @@ from pathlib import Path
 
 # specify ensemble name and directories as appropriate
 ensemble_name = 'ensemble'
-home = Path('ARC')                      
-ppe = home / 'PPE.csv'                  
+home = Path('ARC') 
+data = home / 'data'                     
+ppe = data / 'PPE.csv'                  
 templates = home / 'templates'
-data = home / 'data'                    
+                  
 ensemble_dir = home / ensemble_name     
 
 # constants
@@ -33,25 +34,27 @@ dT_file = {
 df = pd.read_csv(ppe)
 for i, row in df.iterrows():
 
-    num = f'{i+1:03}'
-    run = ensemble_dir / f'run{num}'
-    run.mkdir(parents=True)
+    num = f'{i+1:03}' # 3 digit number between 001 and 120
+    run_directory = ensemble_dir / f'run{num}'
+    run_directory.mkdir(parents=True) # make directory for ensemble member
 
-    # filenames
-    id = f'AIS-BH-GIA-{ensemble_name}-exp{num}.{LEV}lev' # fancy id for plot/checkpoint files
-    name = f'{ensemble_name}-{num}'
-    jobid = f'run{num}'
+    # strings for naming files
+    id = f'AIS-BH-GIA-{ensemble_name}-exp{num}.{LEV}lev' # id for plot/checkpoint files
+    name = f'{ensemble_name}-{num}' # name to replace 'template' in filenames
+    jobid = f'run{num}' # label for naming jobs on the hpc
 
-    # params
+    # perturbed parameters taken from PPE csv
     gamma0 = row['gamma0']
     UMV = row['UMV']
     LRP = row['LRP']
     PDDi = row['PDDi']
     WeertC = row['WeertC']
+    model = row['model']
 
     # ISMIP ocean forcing correction
     deltaT = data / f'coeff_gamma0_DeltaT_quadratic_non_local_{dT_file[gamma0]}_16km_384.2d.hdf5'
 
+    # set up dictionary to make substitutions
     substitutions = {
         '@ID'           :   id,
         '@JOBID'        :   jobid,    
@@ -72,15 +75,17 @@ for i, row in df.iterrows():
 
     # do substitutions and write files
     for template in templates.iterdir():
-        if template.name == '.DS_Store':
+        if template.name == '.DS_Store': # skip hidden files like this
             continue
 
         template_content = template.read_text()
 
+        # iterate over substitutions dictionary and edit template accordingly
         script = template_content
         for placeholder, value in substitutions.items():
             script = script.replace(placeholder, str(value))
 
+        # write edited script to file in the directory for this ensemble member
         outfile_name = template.name.replace('template', name)
-        outfile = run / outfile_name
+        outfile = run_directory / outfile_name
         outfile.write_text(script)
