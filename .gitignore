@@ -17,4 +17,5 @@
 .bashrc
 .DS_Store
 test*
+*.swp
 __pycache__
