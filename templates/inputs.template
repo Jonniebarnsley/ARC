@@ -206,7 +206,7 @@ BasalFrictionPressureLimitedLaw.coefficient = 0.6
 BasalFrictionPressureLimitedLaw.basalFrictionRelation = powerLaw
 BasalFrictionPressureLimitedLaw.tillPressureFactor = 0.99
 
-#if you also want the Columb limit to depend on till water depth
+#if you also want the Columb limit to depend on till water depth. i.e. BISICLES-hydro
 amr.isothermal = false
 amr.write_internal_energy = true
 amr.write_viscous_tensor = true
@@ -227,6 +227,7 @@ basalHeatBoundaryData.fileFormat = ../../run_data/Heatflux_ShapiroRitzwoller2004
 basalHeatBoundaryData.name = Hflux
 ColumnThermodynamics.till_water_max = 2.0
 
+# rate for till water to drain in BISICLES-hydro
 tillWaterDrainFactor.type = constantFlux
 tillWaterDrainFactor.flux_value = 0.3
 
