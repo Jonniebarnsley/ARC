@@ -11,23 +11,15 @@ count_files() {
 }
 
 getIMBIEbasin() {
-
     local ID="$1"
     case $ID in
-    0)
-        echo "WAIS"
-        ;;
-    1)
-        echo "EAIS"
-        ;;
-    2)
-        echo "APIS"
-        ;;
+    0)  echo "WAIS" ;;
+    1)  echo "EAIS" ;;
+    2)  echo "APIS" ;;
     esac
 }
 
 getRignotbasin() {
-    
     local ID="$1"
     case $ID in
     0)      echo "Islands"  ;;
@@ -49,5 +41,21 @@ getRignotbasin() {
     16)     echo "I-Ipp"    ;;
     17)     echo "Hp-I"     ;;
     18)     echo "Ep-F"     ;;
+    esac
+}
+
+getBasin() {
+    local MASK="$1"
+    local ID="$2"
+    case $MASK in
+    *IMBIE*)
+        getIMBIEbasin $ID
+        ;;
+    *rignot*)
+        getRignotbasin $ID
+        ;;
+    *zwally*)
+        echo $ID
+        ;;
     esac
 }

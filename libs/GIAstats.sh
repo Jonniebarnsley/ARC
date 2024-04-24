@@ -8,7 +8,7 @@
 
 source $HOME/libs/utils.sh
 
-usage() { echo "Usage: $0 [-m <mask>] [-b <basin>] <plotfiles_directory> <stats_directory>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-m <mask>] [-b <basin id>] <plotfiles_directory> <stats_directory>" 1>&2; exit 1; }
 
 # handle option to include mask and basin
 while getopts ":m:b:" option; do
@@ -26,7 +26,7 @@ while getopts ":m:b:" option; do
 done
 shift $((OPTIND - 1))
 
-BASIN=$(getIMBIEbasin "$BASIN_ID")
+BASIN=$(getBasin "$MASK" "$BASIN_ID")
 
 # check args    
 if [ "$#" -ne 2 ]; then
