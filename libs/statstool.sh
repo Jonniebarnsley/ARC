@@ -28,8 +28,18 @@ fi
 FILE="$1"
 
 # apply stats tool
+
+# if no mask
 if [ -z "${MASK}" ]; then
-    $STATS $FILE 918.0 1028.0 9.81 0.0 # <rho_ice> <rho_seawater> <gravity> <sea_level>
-else
-    $STATS $FILE 918.0 1028.0 9.81 0.0 $MASK $BASIN_ID
+    "$STATS" "$FILE" 918.0 1028.0 9.81 0.0 # <rho_ice> <rho_seawater> <gravity> <sea_level>
+    exit
 fi
+
+# if mask given but incorrect filepath
+if [ ! -f "$MASK" ]; then
+    echo "$MASK does not exist" 
+    exit 1
+fi
+
+# otherwise
+"$STATS" "$FILE" 918.0 1028.0 9.81 0.0 "$MASK" "$BASIN_ID"
