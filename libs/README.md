@@ -11,6 +11,7 @@ Useful scripts for running BISICLES on ARC and processing its outputs.
 | `all_txt_to_csv.sh`       | Converts all summary txt files into csvs using summary_to_csv.py                              |
 | `ensemble_to_csv.py`      | Iterates over run directories in an ensemble and converts summary_stats.txt files into csvs   |
 | `generate_PPE.py`         | Creates directories and job scripts for all runs in an ensemble                               |
+| `make_GIAstats_jobs.sh`   | Makes and/or queues jobs in each run for processing GIAstats                                  |
 | `mk_inputs_AIS_control_ensemble.sh` | Deprecated version of `generate_PPE.py` in bash                                     |
 | `process_thickness.sh`    | Job script to process thickness netcdfs for an ensemble (using parallel processing)           |
 | `runGIAstats.sh`          | Deprecated script for calculating GIAstats for IMBIE basins                                   |
