@@ -4,16 +4,16 @@ usage() { echo "Usage: $0 [-m <mask>] [-b <basin id>] <plotfile>" 1>&2; exit 1; 
 
 STATS="/nobackup/earjo/gia_stats_exec/gia-stats2d"
 
-# handle options for mask and basin
+# handle options
 while getopts ":m:b:" option; do
     case "${option}" in
-        m)
+        m)  # specify mask
             MASK=${OPTARG}
             ;;
-        b)
+        b)  # specify basin number
             BASIN_ID=${OPTARG}
             ;;
-        *)
+        *)  # invalid option
             usage
             ;;
     esac
@@ -27,7 +27,7 @@ fi
 
 FILE="$1"
 
-# apply stats tool
+# now apply the stats tool to the plotfile
 
 # if no mask
 if [ -z "${MASK}" ]; then
@@ -37,7 +37,7 @@ fi
 
 # if mask given but incorrect filepath
 if [ ! -f "$MASK" ]; then
-    echo "$MASK does not exist" 
+    echo "error: $MASK does not exist" 
     exit 1
 fi
 
