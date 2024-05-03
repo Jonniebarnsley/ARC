@@ -10,16 +10,16 @@ source $HOME/libs/utils.sh
 
 usage() { echo "Usage: $0 [-m <mask>] [-b <basin id>] <plotfiles_directory> <stats_directory>" 1>&2; exit 1; }
 
-# handle option to include mask and basin
+# handle options
 while getopts ":m:b:" option; do
     case $option in
-        m)  
+        m)  # specify mask
             MASK="$OPTARG"
             ;;
-        b)
+        b)  # specify basin
             BASIN_ID="$OPTARG"
             ;;
-        *) 
+        *)  # invalid option
             usage
             ;;
     esac
