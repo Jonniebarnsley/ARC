@@ -48,14 +48,8 @@ getBasin() {
     local MASK="$1"
     local ID="$2"
     case $MASK in
-    *IMBIE*)
-        getIMBIEbasin $ID
-        ;;
-    *rignot*)
-        getRignotbasin $ID
-        ;;
-    *zwally*)
-        echo $ID
-        ;;
+    *IMBIE*)    getIMBIEbasin $ID   ;;
+    *rignot*)   getRignotbasin $ID  ;;
+    *zwally*)   echo $ID            ;;
     esac
 }
