@@ -14,12 +14,12 @@ outfile="$2"
 
 # if the summary already contains data up to 9990 years, stop
 if [ -f $outfile ] && tail $outfile | grep -q 'time = 9.990'; then
-    exit 1
+    exit
 fi
 
 # otherwise, wipe the summary file and copy all statsfiles into summary
 > "$outfile"
 for statsfile in $GIAstats/*.GIAstats; do
-    cat "$statsfile" >> "$outfile"
+    grep 'time = ' "$statsfile" >> "$outfile"
 done
  
