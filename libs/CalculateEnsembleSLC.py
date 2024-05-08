@@ -48,9 +48,7 @@ def get_init_state(ensemble: Path, basin: str='AIS') -> pd.DataFrame:
         - Pandas dataframe with one row and columns for each GIAstats output var
     '''
     
-    relax_stats = sorted(ensemble.glob('run*/run*_2lev_ref/GIAstats_relax/'))[0]
-    basin_stats = relax_stats / basin
-    init_stats = sorted(basin_stats.iterdir())[0]
+    init_stats = ensemble / 'GIAstats_init' / f'{basin}_init_stats.txt'
 
     with open(init_stats, 'r') as file:
         content = file.read()
@@ -88,12 +86,13 @@ def main(ensemble, basin):
             continue
         
         # open summary_stats.csv if it exists
+        run_name = match.group(0)
         run_num = match.group(1)
-        csv = dir / f'{dir.name}_2lev_ref' / f'{basin}_{run_num}_control_summary_stats.csv'
+        csv = dir / f'{dir.name}_2lev_ref' / 'summary_stats' / 'Rignot' / f'{basin}_{run_name}_control_summary_stats.csv'
         try:
             run_df = pd.read_csv(csv)
         except FileNotFoundError:
-            print(f'File not found: {run_df}')
+            print(f'File not found: {csv}')
             continue
         
         # add inital state in at time=0 and extract arrays for Volume Above Floatation,
@@ -117,6 +116,7 @@ def main(ensemble, basin):
     
     # save to csv
     csv_path = path / f'{path.name}_{basin}.csv'
+    print(csv_path.name)
     SLC_df.to_csv(csv_path)
     
 
@@ -125,6 +125,10 @@ if __name__ == '__main__':
         raise SystemExit('Usage: CalculateEnsembleSLC.py <ensemble_path>')
     else:
         ensemble = sys.argv[1]
-        for basin in ['AIS', 'WAIS', 'EAIS', 'APIS']:
+        #for basin in ['AIS', 'WAIS', 'EAIS', 'APIS']:
+        #for basin_id in range(1, 28):
+        for basin_id in ['A-Ap', 'Ap-B', 'B-C', 'C-Cp', 'Cp-D', 'D-Dp', 'Dp-E', 'E-Ep', 'Ep-F', 'F-G', \
+                'G-H', 'H-Hp', 'Hp-I', 'I-Ipp', 'Ipp-J', 'Islands', 'J-Jpp', 'Jpp-K', 'K-A']:
+            basin = f'Rignot_{basin_id}'
             main(ensemble, basin)
 
