@@ -1,15 +1,18 @@
 #!/bin/bash
 
-# function to count the number of files in a 
-# directory which match a given pattern.
-
+# function to count the number of files in a directory which match a given pattern.
 count_files() {
-
     local directory="$1"
     local pattern="$2"
     find "$directory" -maxdepth 1 -type f -name "$pattern" | wc -l
 }
 
+# add leading zeros to numbers
+digits() {
+   echo "test" 
+}
+
+# matches mask values with IMBIE basins
 getIMBIEbasin() {
     local ID="$1"
     case $ID in
@@ -19,6 +22,7 @@ getIMBIEbasin() {
     esac
 }
 
+# matches mask values with Rignot basins
 getRignotbasin() {
     local ID="$1"
     case $ID in
@@ -44,6 +48,7 @@ getRignotbasin() {
     esac
 }
 
+# checks mask filename and uses appropriate basin-finding function
 getBasin() {
     local MASK="$1"
     local ID="$2"
