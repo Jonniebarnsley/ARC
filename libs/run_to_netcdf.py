@@ -21,24 +21,30 @@ MAX_TIME = 10_000   # trim time axis at this value
 FILL_VALUE = 0      # fill NaNs with this value
 
 # specs for encoding
-specs={
-    'thickness'                     :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m'},
-    'Z_surface'                     :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m'},
-    'Z_base'                        :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m'},
-    'Z_bottom'                      :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m'},
-    'basal_friction'                :   {'conversion':1.0, 'prec':1.0, 'dtype':'int32', 'units':''},
-    'surfaceThicknessSource'        :   {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm/yr'},
-    'activeSurfaceThicknessSource'  :   {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm/yr'},
-    'basalThicknessSource'          :   {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm/yr'},
-    'activeBasalThicknessSource'    :   {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm/yr'},
-    'tillWaterDepth'                :   {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm'},
-    'waterDepth'                    :   {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm'},
-    'mask'                          :   {'conversion':1.0, 'prec':1.0, 'dtype':'int16', 'units':'unitless'}, 
-    'yVel'                          :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
-    'xVel'                          :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
-    'ybVel'                         :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
-    'xbVel'                         :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
-    'bTemp'                         :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'K'}
+variable_spec = {
+    'thickness'                      : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m'},
+    'Z_surface'                      : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m'},
+    'Z_base'                         : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m'},
+    'Z_bottom'                       : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m'},
+    'bTemp'                          : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units': 'K'},
+    'sTemp'                          : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units': 'K'},
+    'calvingFlux'                    : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units': ''},
+    'calvingRate'                    : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units': ''},
+    'dragCoef'                       : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units': ''},
+    'viscosityCoef'                  : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units': ''},
+    'iceFrac'                        : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units': 'unitless'},
+    'basal_friction'                 : {'conversion':1.0, 'prec':1.0, 'dtype':'int32', 'units':''},
+    'surfaceThicknessSource'         : {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm/yr'},
+    'activeSurfaceThicknessSource'   : {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm/yr'},
+    'basalThicknessSource'           : {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm/yr'},
+    'activeBasalThicknessSource'     : {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm/yr'},
+    'tillWaterDepth'                 : {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm'},
+    'waterDepth'                     : {'conversion':1000.0, 'prec':1.0, 'dtype':'int32', 'units':'mm'},
+    'mask'                           : {'conversion':1.0, 'prec':1.0, 'dtype':'int16', 'units':'unitless'}, 
+    'yVel'                           : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
+    'xVel'                           : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
+    'ybVel'                          : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
+    'xbVel'                          : {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'}
     }
 
 def extract_field(variable: str, plotfile: str, lev: int=0, order: int=0) -> xr.Dataset:
