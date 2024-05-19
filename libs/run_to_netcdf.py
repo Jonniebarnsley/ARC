@@ -37,10 +37,11 @@ specs={
     'yVel'                          :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
     'xVel'                          :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
     'ybVel'                         :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
-    'xbVel'                         :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'}
+    'xbVel'                         :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'m/yr'},
+    'bTemp'                         :   {'conversion':1.0, 'prec':0.01, 'dtype':'int32', 'units':'K'}
     }
 
-def extract_field(variable: str, plotfile: str, lev: int=0, order: int=0) -> xr.DataSet:
+def extract_field(variable: str, plotfile: str, lev: int=0, order: int=0) -> xr.Dataset:
 
     '''
     Extracts time and variable data from a .hdf5 plotfile and returns an xarray dataset
@@ -49,7 +50,7 @@ def extract_field(variable: str, plotfile: str, lev: int=0, order: int=0) -> xr.
     :param plotfile: path to plotfile as string
 
     :return time: time of plotfile
-    :return ds: dataset of variable (xr.DataSet)
+    :return ds: dataset of variable (xr.Dataset)
     '''
 
     # read hdf5
@@ -62,7 +63,7 @@ def extract_field(variable: str, plotfile: str, lev: int=0, order: int=0) -> xr.
     conversion_factor = specs[variable]['conversion']
     field_in_units = np.asarray(field) * conversion_factor
 
-    # make DataSet
+    # make Dataset
     ds = xr.Dataset({
         variable: xr.DataArray(
             data = field_in_units,
@@ -86,7 +87,7 @@ def generate_netcdf(variable: str, run: str, lev: int=0):
 
     # prepare directory
     run_directory = Path(run)
-    ensemble = run_directory.parent
+    ensemble = run_directory.resolve().parent.parent
     savedir = ensemble / 'netcdfs' / variable
     savedir.mkdir(parents=True, exist_ok=True)
 
@@ -97,8 +98,10 @@ def generate_netcdf(variable: str, run: str, lev: int=0):
 
     times = []
     timeslices = []
-    plotfiles = run_directory / f'{run_directory.name}_2lev_ref' / 'plotfiles'
-    for plotfile in sorted(plotfiles.iterdir()):
+    #plotfiles = run_directory / f'{run_directory.name}_2lev_ref' / 'plotfiles'
+    for plotfile in sorted(run_directory.iterdir()):
+        
+        print(plotfile)
 
         # get datasets from plotfiles and associated time coordinates
         time, timeslice = extract_field(variable, str(plotfile), lev=lev)
