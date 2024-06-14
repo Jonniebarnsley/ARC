@@ -35,13 +35,12 @@ df = pd.read_csv(ppe)
 for i, row in df.iterrows():
 
     num = f'{i+1:03}' # 3 digit number between 001 and 120
-    run_directory = ensemble_dir / f'run{num}'
-    run_directory.mkdir(parents=True) # make directory for ensemble member
+    run_name = f'run{num}'
+    id = f'{ensemble_name}-exp{num}' # id for naming files
 
-    # strings for naming files
-    id = f'AIS-BH-GIA-{ensemble_name}-exp{num}.{LEV}lev' # id for plot/checkpoint files
-    name = f'{ensemble_name}-{num}' # name to replace 'template' in filenames
-    jobid = f'run{num}' # label for naming jobs on the hpc
+    # make directory for ensemble member
+    run_directory = ensemble_dir / run_name
+    run_directory.mkdir(parents=True) 
 
     # perturbed parameters taken from PPE csv
     gamma0 = row['gamma0']
@@ -57,8 +56,7 @@ for i, row in df.iterrows():
     # set up dictionary to make substitutions
     substitutions = {
         '@ID'           :   id,
-        '@JOBID'        :   jobid,    
-        '@NAME'         :   name,
+        '@JOBID'        :   run_name,    
         '@NCELLS'       :   NCELLS,         
         '@TAGCAP'       :   TAGCAP,
         '@TEMP'         :   temp,
@@ -86,6 +84,6 @@ for i, row in df.iterrows():
             script = script.replace(placeholder, str(value))
 
         # write edited script to file in the directory for this ensemble member
-        outfile_name = template.name.replace('template', name)
+        outfile_name = template.name.replace('template', id)
         outfile = run_directory / outfile_name
         outfile.write_text(script)
