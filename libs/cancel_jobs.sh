@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for ((i = 63; i <= 88; i++)); do
-    jobnum="56467$i"
+for i in {06..26}; do
+    jobnum="60918$i"
     qdel $jobnum
 done
