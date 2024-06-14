@@ -31,13 +31,13 @@ MV2_ENABLE_AFFINITY=0
 mkdir -p plotfiles_relax
 
 # run bisicles:
-mpirun driver2d inputs_relax.@NAME
+mpirun driver2d inputs_relax.@ID
 
 # tidy up
 rm pout.*
 mkdir -p checkpoints
 mv chk.*.hdf5 checkpoints
 
-source wrapper.@NAME.sh
+source wrapper.@ID.sh
 # end time:
 date

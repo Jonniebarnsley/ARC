@@ -19,12 +19,13 @@ module load python3 netcdf hdf5
 module switch intel gnu # switch compilers
 module switch openmpi mvapich2 # switch mpi
 
+# load python environment
 module load anaconda
 source activate bisicles
 
 module list
 
-# environment variables
+# shell variables
 BASEDIR=$SGE_O_WORKDIR
 PYDIR=$BASEDIR
 export PYTHONPATH=$PYDIR
@@ -42,12 +43,11 @@ mkdir -p smb_history
 
 # save old inputs and start new inputs file:
 mv inputs inputs_history/inputs.$(date '+%Y%m%d%H%M').$ts
-cp inputs.@NAME inputs
+cp inputs.@ID inputs
 
 # establish the timestep
 last_plotfile=$(ls -tr plotfiles/plot.*.hdf5 | tail -n1)
 if [ -n "$last_plotfile" ]; then
-    sed -i "/amr.restart_time = 0.0/d" inputs
     timestep=$(python get_timestep.py plotfiles/$last_plotfile)
 else
     timestep=0
@@ -68,16 +68,13 @@ echo "BISICLES done"
 
 # tidy up
 rm pout.*
-mv chk.*.hdf5 checkpoints
 ls -t @JOBID.o* | tail -n +2 | -I{} mv {} outputfiles
-
-ls @NAME.o*
 
 # Calculate surface mass balance
 mv smb.nc smb_history/smb.$(date '+%Y%m%d%H%M').$ts.nc
 rm smb.hdf5
 echo "Calculating SMB..."
-$PYTHON calc_smb.@NAME.py
+$PYTHON calc_smb.@ID.py
 $NCTOAMR smb.nc smb.hdf5 smb
 echo "SMB done"
 conda deactivate
@@ -95,7 +92,7 @@ if [ "${next_coupling}" -lt "${max_time}" ]; then
       echo "Core files generated, abort..."
       rm core.*
   else
-      qsub job.@NAME.sh
+      qsub job.@ID.sh
   fi
 fi
 

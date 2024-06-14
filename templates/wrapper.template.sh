@@ -15,9 +15,9 @@ NCTOAMR=$BISICLES_HOME/BISICLES/BISICLES/code/filetools/nctoamr2d.Linux.*
 PYTHON=/home/home01/earjbar/.conda/envs/bisicles/bin/python
 
 if [ ! -f "smb.hdf5" ] ; then
-    $PYTHON init_smb.@NAME.py
+    $PYTHON init_smb.@ID.py
     $NCTOAMR smb.nc smb.hdf5 smb
 fi
 
 conda deactivate
-qsub job.@NAME.sh
+qsub job.@ID.sh

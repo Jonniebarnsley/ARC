@@ -1,6 +1,6 @@
 import math
 
-def ramp(x,y,t,*etc):	
+def ramp(x,y,t,*etc):
     
     coef = 1.0
     if (t < 100.0):
