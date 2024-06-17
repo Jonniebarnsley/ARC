@@ -2,7 +2,7 @@
 
 #$ -cwd -V
 #$ -l h_rt=02:00:00
-#$ -l nodes=1
+#$ -pe smp 20
 #$ -N "@JOBID"
 #$ -m be
 #$ -M earjbar@leeds.ac.uk
