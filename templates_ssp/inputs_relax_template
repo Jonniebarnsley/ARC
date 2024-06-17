@@ -29,7 +29,7 @@ constants.ice_density = 918
 
 # Bed topography from BedMachine-2
 geometry.problem_type = LevelData
-inputLevelData.geometryFile = nobackup/earjbar/data/bedmachine_modified_bedrock_geometry_1km_6144.hdf5
+inputLevelData.geometryFile = /nobackup/earjbar/data/bedmachine_modified_bedrock_geometry_1km_6144.hdf5
 inputLevelData.thicknessName = thck
 inputLevelData.topographyName = topg
 
@@ -38,12 +38,12 @@ inputLevelData.topographyName = topg
 
 # basal friction coefficient from inversion
 geometry.beta_type = LevelData
-inputLevelData.frictionFile = nobackup/earjbar/data/ant-mb64-cthird-1km.2d.hdf5
+inputLevelData.frictionFile = /nobackup/earjbar/data/ant-mb64-cthird-1km.2d.hdf5
 inputLevelData.frictionName = Cthird
 
 # stiffness from inversion
 muCoefficient.type = LevelData
-inputLevelData.muCoefFile = nobackup/earjbar/data/ant-mb64-mucoefLT1-1km.2d.hdf5
+inputLevelData.muCoefFile = /nobackup/earjbar/data/ant-mb64-mucoefLT1-1km.2d.hdf5
 inputLevelData.muCoefName = muCoefLT1
 
 # basal friction relation parameters
@@ -61,7 +61,7 @@ BasalFrictionPowerLaw.includeEffectivePressure = false
 
 # initialise with Pattyn temperature field
 temperature.type = LevelData
-inputLevelData.temperatureFile = nobackup/earjbar/data/antarctica-temperature-4km.2d.hdf5
+inputLevelData.temperatureFile = /nobackup/earjbar/data/antarctica-temperature-4km.2d.hdf5
 inputLevelData.temperatureName = temp000000
 
 
@@ -72,7 +72,7 @@ surfaceFlux.type = LevelData
 surfaceFlux.n = 1
 surfaceFlux.timeStep = 1.0e+10
 surfaceFlux.startTime = 0.0
-surfaceFlux.fileFormat = nobackup/earjbar/data/antarctica-acca-4km.2d.hdf5
+surfaceFlux.fileFormat = /nobackup/earjbar/data/antarctica-acca-4km.2d.hdf5
 surfaceFlux.name = acca
 
 
@@ -221,8 +221,3 @@ amr.cfl = 0.25
 amr.initial_cfl = 0.25  
 amr.max_dt_grow_factor = 2.0 
 amr.time_step_ticks = 0
-
-
-
-
-
