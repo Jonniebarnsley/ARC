@@ -3,7 +3,7 @@
 #$ -cwd -V
 #$ -l h_rt=02:00:00
 #$ -pe smp 20
-#$ -l h_vmem=1G
+#$ -l h_vmem=4G
 #$ -N "@JOBID"
 #$ -m be
 #$ -M earjbar@leeds.ac.uk
