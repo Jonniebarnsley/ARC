@@ -4,7 +4,7 @@ from pathlib import Path
 # specify ensemble name and directories as appropriate
 home = Path('/home/home01/earjbar')
 nobackup = Path('/nobackup/earjbar')
-ensemble_name = 'test'
+ensemble_name = 'tests'
 ensemble_dir = nobackup / ensemble_name
 
 data = nobackup / 'data'                     
