@@ -8,24 +8,18 @@ ensemble_name = 'test'
 ensemble_dir = nobackup / ensemble_name
 
 data = nobackup / 'data'                     
-ppe = home / 'data' / 'PPE.csv'                  
-templates = home / 'templates'
+ppe = home / 'csvs' / 'PPE.csv'                  
+templates = home / 'templates_ssp'
 
-
+run_name = 'new_smb'
 
 # constants
 LEV = 2         # levels of refinement
 TAGCAP = LEV-1  # highest level tagged for refinement
 NCELLS = 384    # number of cells pre-refinement (16 km base resolution for 6144 km grid)
 
-# forcings
-temp = data / 'RACMO_T2m_1979_2000_8000m_T2m_768.nc'
-precip = data / 'RACMO_precip_1979_2000_8000m_precip_768.nc'
-ISMIP_ocean_forcing = data / 'obs_thermal_forcing_1995-2017_16km_bisicles_compatible.hdf5'
-init_height = data / 'RACMO_T2m_precip_1979_2000_8000m_height_768.nc'
-
 # dictionary to match ISMIP gamma0 values with deltaT files
-dT_file = {
+dT_percentile = {
     9618.882299     :   '5th_percentile',
     14477.33676     :   'median',
     21005.34364     :   '95th_percentile',
@@ -38,7 +32,9 @@ df = pd.read_csv(ppe)
 for i, row in df.iterrows():
 
     num = f'{i+1:03}' # 3 digit number between 001 and 120
-    run_name = f'run{num}'
+    if num != '083':
+        continue # use only run 083 for testing
+
     id = f'{ensemble_name}-exp{num}' # id for naming files
 
     # make directory for ensemble member
@@ -54,7 +50,7 @@ for i, row in df.iterrows():
     model = row['model']
 
     # ISMIP ocean forcing correction
-    deltaT = data / f'coeff_gamma0_DeltaT_quadratic_non_local_{dT_file[gamma0]}_16km_384.2d.hdf5'
+    deltaT = data / 'dT' / f'coeff_gamma0_DeltaT_quadratic_non_local_{dT_percentile[gamma0]}_16km_384.2d.hdf5'
 
     # set up dictionary to make substitutions
     substitutions = {
@@ -62,10 +58,6 @@ for i, row in df.iterrows():
         '@JOBID'        :   run_name,    
         '@NCELLS'       :   NCELLS,         
         '@TAGCAP'       :   TAGCAP,
-        '@TEMP'         :   temp,
-        '@PRECIP'       :   precip,
-        '@ISMIP_OCEAN'  :   ISMIP_ocean_forcing,
-        '@HEIGHT'       :   init_height,
         '@gamma0'       :   gamma0,
         '@UMV'          :   UMV,
         '@LRP'          :   LRP,
