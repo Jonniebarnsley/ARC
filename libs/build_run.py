@@ -16,7 +16,7 @@ run_name = 'new_smb'
 # constants
 LEV = 2         # levels of refinement
 TAGCAP = LEV-1  # highest level tagged for refinement
-NCELLS = 384    # number of cells pre-refinement (16 km base resolution for 6144 km grid)
+NCELLS = 768    # number of cells pre-refinement (16 km base resolution for 6144 km grid)
 
 # dictionary to match ISMIP gamma0 values with deltaT files
 dT_percentile = {
