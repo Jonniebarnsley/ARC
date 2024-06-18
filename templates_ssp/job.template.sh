@@ -44,7 +44,7 @@ mkdir -p smb_history
 
 # save old inputs and start new inputs file:
 #mv inputs inputs_history/inputs.$(date '+%Y%m%d%H%M').$ts
-cp inputs.@ID inputs
+cp inputs_@ID inputs
 
 # establish the timestep
 #last_plotfile=$(ls -tr plotfiles/plot.*.hdf5 | tail -n1)
