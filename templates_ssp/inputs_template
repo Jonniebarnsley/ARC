@@ -46,7 +46,7 @@ constants.ice_density = 918
 
 geometry.problem_type = LevelData
 inputLevelData.geometryFile = /nobackup/earjbar/data/ant-minbed64-s-geometry-1km.2d.hdf5
-inputLevelData.thicknessName = thk
+inputLevelData.thicknessName = thck
 inputLevelData.topographyName = topg
 
 
@@ -54,7 +54,7 @@ inputLevelData.topographyName = topg
 
 # Basal friction calculated by Python script
 geometry.beta_type = Python
-PythonBasalFriction.module = basal_friction.@ID
+PythonBasalFriction.module = basal_friction_@ID
 PythonBasalFriction.function = bedFricCalc
 
 # Setup Tsai sliding law

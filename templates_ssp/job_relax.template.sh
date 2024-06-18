@@ -4,7 +4,7 @@
 #$ -l h_rt=02:00:00
 #$ -pe smp 20
 #$ -l h_vmem=4G
-#$ -N "@JOBID"
+#$ -N "@JOBID_relax"
 #$ -m be
 #$ -M earjbar@leeds.ac.uk
 #$ -j y
