@@ -54,7 +54,7 @@ inputLevelData.topographyName = topg
 
 # Basal friction calculated by Python script
 geometry.beta_type = Python
-PythonBasalFriction.module = basal_friction.@ID
+PythonBasalFriction.module = basal_friction_@ID
 PythonBasalFriction.function = bedFricCalc
 
 # Setup Tsai sliding law
