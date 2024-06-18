@@ -11,7 +11,7 @@ data = nobackup / 'data'
 ppe = home / 'csvs' / 'PPE.csv'                  
 templates = home / 'templates_ssp'
 
-run_name = 'new_smb'
+run_name = 'new_smb_8km'
 
 # constants
 LEV = 2         # levels of refinement
