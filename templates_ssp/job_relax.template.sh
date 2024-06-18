@@ -30,14 +30,10 @@ MV2_ENABLE_AFFINITY=0
 
 # make plotfile directory if it doesn't exist
 mkdir -p plotfiles_relax
+mkdir -p checkpoints
 
 # run bisicles:
 mpirun driver2d inputs_relax_@ID
-
-# tidy up
-rm pout.*
-mkdir -p checkpoints
-mv chk.*.hdf5 checkpoints
 
 source wrapper.@ID.sh
 # end time:
