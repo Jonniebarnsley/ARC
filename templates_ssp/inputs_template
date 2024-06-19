@@ -75,38 +75,43 @@ thin_ice_drag.thickness = 10.0 # max thickness of thin ice
 
 ##########################  THERMODYNAMICS  ############################
 
+# initialise with Pattyn temperature field
+temperature.type = LevelData
+inputLevelData.temperatureFile = /nobackup/earjbar/data/antarctica-temperature-4km.2d.hdf5
+inputLevelData.temperatureName = temp000000
+
 # Activate thermodynamics component (Aschwanden et al, 2012; doi: 10.3189/2012JoG11J088)
-amr.isothermal = false
+#amr.isothermal = false
 
 # Energy density E is composed from temperature and water fraction and is a 3-D field
 # with values at the centre of each grid cell in each layer.
 
 # Set surface boundary condition to temperature (in K) rather than heat flux
-surfaceHeatBoundaryData.Dirichlett = true  # false by default
-surfaceHeatBoundaryData.Temperature = true # true by default
+#surfaceHeatBoundaryData.Dirichlett = true  # false by default
+#surfaceHeatBoundaryData.Temperature = true # true by default
 
 # Surface temperature determined by altitude (python module)
-surfaceHeatBoundaryData.type = pythonFlux
-surfaceHeatBoundaryData.module = surface_temp_module
-surfaceHeatBoundaryData.function = surface_temperature
+#surfaceHeatBoundaryData.type = pythonFlux
+#surfaceHeatBoundaryData.module = surface_temp_module
+#surfaceHeatBoundaryData.function = surface_temperature
 
 # Geothermal flux (in J/a/m^2)
-basalHeatBoundaryData.type = LevelData
-basalHeatBoundaryData.n = 1
-basalHeatBoundaryData.timeStep = 1.0e+10
-basalHeatBoundaryData.startTime = 0.0
-basalHeatBoundaryData.fileFormat = /nobackup/earjbar/data/Heatflux_ShapiroRitzwoller2004_antarctica_plismip_8kmx8km_768.2d.hdf5
-basalHeatBoundaryData.name = Hflux
+#basalHeatBoundaryData.type = LevelData
+#basalHeatBoundaryData.n = 1
+#basalHeatBoundaryData.timeStep = 1.0e+10
+#basalHeatBoundaryData.startTime = 0.0
+#basalHeatBoundaryData.fileFormat = /nobackup/earjbar/data/Heatflux_ShapiroRitzwoller2004_antarctica_plismip_8kmx8km_768.2d.hdf5
+#basalHeatBoundaryData.name = Hflux
 
 
 ##########################  HYDROLOGY  ############################
 
 # rate for till water to drain (into putative ground water system)
-tillWaterDrainFactor.type = constantFlux
-tillWaterDrainFactor.flux_value = 0.3
+#tillWaterDrainFactor.type = constantFlux
+#tillWaterDrainFactor.flux_value = 0.3
 
 # Limit till water to maximum value
-ColumnThermodynamics.till_water_max = 2.0 # (default 4.0 m)
+#ColumnThermodynamics.till_water_max = 2.0 # (default 4.0 m)
 
 
 
@@ -316,3 +321,5 @@ amr.time_step_ticks = 0
 amr.restart_set_time = false
 amr.restart_time =  0
 amr.offsetTime = 2007
+
+# extra inputs added during runtime go here
