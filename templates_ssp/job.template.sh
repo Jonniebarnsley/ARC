@@ -59,7 +59,7 @@ cp inputs_@ID inputs
 
 # update input file:
 last_checkpoint=$(ls -tr checkpoints/chk.*.hdf5 | tail -n1)
-echo "amr.restart_file = checkpoints/${last_checkpoint}" >> inputs
+echo -e "\namr.restart_file = ${last_checkpoint}" >> inputs
 #echo "main.maxTime = $next_coupling" >> inputs
 
 # run BISICLES:
@@ -75,8 +75,8 @@ rm pout.*
 #mv smb.nc smb_history/smb.$(date '+%Y%m%d%H%M').$ts.nc
 #rm smb.hdf5
 #echo "Calculating SMB..."
-#$PYTHON calc_smb.@ID.py
-#$NCTOAMR smb.nc smb.hdf5 smb
+# $PYTHON calc_smb.@ID.py
+# $NCTOAMR smb.nc smb.hdf5 smb
 #echo "SMB done"
 conda deactivate
 
