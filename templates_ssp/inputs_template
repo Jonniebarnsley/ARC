@@ -75,10 +75,11 @@ thin_ice_drag.thickness = 10.0 # max thickness of thin ice
 
 ##########################  THERMODYNAMICS  ############################
 
-# initialise with Pattyn temperature field
+# Mira's temperature data
 temperature.type = LevelData
-inputLevelData.temperatureFile = /nobackup/earjbar/data/antarctica-temperature-4km.2d.hdf5
-inputLevelData.temperatureName = temp000000
+inputLevelData.internalEnergyFile = /nobackup/earjbar/data/antarctica-bisicles-CTplusLW_8km.2d.hdf5
+inputLevelData.internalEnergyName = internalEnergy0000
+inputLevelData.readInternalEnergy = true
 
 # Activate thermodynamics component (Aschwanden et al, 2012; doi: 10.3189/2012JoG11J088)
 #amr.isothermal = false
@@ -292,7 +293,7 @@ topographyFlux.oceanLoad = true
 
 # Basic plot options
 amr.plot_time_interval = 1.0
-amr.plot_prefix = plot.@ID
+amr.plot_prefix = plotfiles/plot.@ID.
 amr.plot_style_amr = true
 
 # Variables to write to file
