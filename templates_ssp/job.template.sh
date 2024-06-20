@@ -10,6 +10,7 @@
 #$ -j y
 
 start_time=$(date +%s)
+echo "start time: $(date)"
 
 # prepare modules
 module purge
@@ -98,6 +99,7 @@ conda deactivate
 #fi
 
 end_time=$(date +%s)
+echo "end time: $(date)"
 
 # Calculate the duration
 duration=$((end_time - start_time))
@@ -108,4 +110,4 @@ minutes=$(((duration % 3600) / 60))
 seconds=$((duration % 60))
 
 # Print the duration
-printf "Script duration: %02d:%02d:%02d\n" $hours $minutes $seconds
+printf "duration: %02d:%02d:%02d\n" $hours $minutes $seconds
