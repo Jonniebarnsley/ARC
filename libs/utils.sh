@@ -56,5 +56,6 @@ getBasin() {
     *IMBIE*)    getIMBIEbasin $ID           ;;
     *rignot*)   getRignotbasin $ID          ;;
     *zwally*)   echo $(printf "%02d" $ID)   ;;
+    *)          echo "AIS"                  ;;
     esac
 }
