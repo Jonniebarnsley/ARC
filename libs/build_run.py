@@ -11,7 +11,7 @@ data = nobackup / 'data'
 ppe = home / 'csvs' / 'PPE.csv'                  
 templates = home / 'templates_ssp'
 
-run_name = 'smb_MiraT_8km'
+run_name = 'exactlyMira'
 
 # constants
 LEV = 2         # levels of refinement
