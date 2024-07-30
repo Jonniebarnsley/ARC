@@ -3,6 +3,8 @@
 usage() { echo "Usage: $0 [-m <mask>] [-b <basin id>] <plotfile>" 1>&2; exit 1; }
 
 STATS="/nobackup/earjbar/gia-stats2d"
+#STATS=/nobackup/earjo/BISICLESoct2021/BISICLES/code/filetools/gia-stats2d.Linux.64.mpic++.ifort.DEBUG.OPT.MPI.ex
+#STATS="$BISICLES_HOME/BISICLES/BISICLES/code/filetools
 
 # handle options
 while getopts ":m:b:" option; do

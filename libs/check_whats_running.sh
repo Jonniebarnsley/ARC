@@ -10,15 +10,17 @@
 #    echo "$job has completed $years_complete years"
 #done
 
-running_jobs=$(source qstatFullJobNames.sh | awk '{print $3}')
+running_jobs=$(bash $HOME/libs/qstatFullJobNames.sh | awk '{print $3}')
 
 #for EXPT in 1 2 3 5 6 7 8 10 11 12 13 14 15 16 17 18 19 20 21 23 24 29 30 33 34 35 37 42 43 46 49 51 52 57 59; do
 #for EXPT in 61 62 64 66 67 68 70 73 74 76 77 78 79 80 82 84 85 86 87 88 89 90 91 97 98 102 103 104 105 107 108 109 110 111 112 114 115 117 118; do
-for EXPT in {1..120}; do
-
-    EXPT=$(printf "%03d" "$EXPT")
-    job="run${EXPT}_control"
-    plotfiles_dir="./$job/${job}_2lev_ref/plotfiles"
+for EXPT in {031..060}; do
+    if [ $EXPT -eq '048' ]; then
+        echo 'run048 has crashed :('
+        continue
+    fi
+    job="run${EXPT}"
+    plotfiles_dir="/nobackup/earjbar/Pliocene/${job}_cesm/${job}_cesm_2lev_ref/plotfiles"
     file_count=$(ls -1 "$plotfiles_dir" | wc -l)
     years_complete=$((30*$file_count))
 
